@@ -47,7 +47,7 @@
         <script type="module" crossorigin="anonymous">
             import * as SpiceHtml5 from './src/main.js';
 
-            var host = null, port = null;
+            var host = null;
             var sc;
 
             function spice_error(e)
@@ -57,23 +57,17 @@
 
             function connect()
             {
-                var host, port, password, scheme = "ws://", uri;
+                var host, scheme = "wss://", uri;
 
                 host = document.getElementById("host").value;
-                port = document.getElementById("port").value;
-                password = document.getElementById("password").value;
 
 
-                if ((!host) || (!port)) {
-                    console.log("must set host and port");
-                    return;
-                }
 
                 if (sc) {
                     sc.stop();
                 }
 
-                uri = scheme + host + ":" + port;
+                uri = scheme + host;
 
                 document.getElementById('connectButton').innerHTML = "Stop Connection";
                 document.getElementById('connectButton').onclick = disconnect;
@@ -81,7 +75,7 @@
                 try
                 {
                     sc = new SpiceHtml5.SpiceMainConn({uri: uri, screen_id: "spice-screen", dump_id: "debug-div",
-                                message_id: "message-div", password: password, onerror: spice_error, onagent: agent_connected });
+                                message_id: "message-div", onerror: spice_error, onagent: agent_connected });
                 }
                 catch (e)
                 {
@@ -159,8 +153,6 @@
         <div id="Sidenav" class="SidenavClosed" style="width: 0;">
             <p class="closebtn" onclick="close_nav()">&#10006;</p>
             <label for="host">Host:</label> <input type='text' id='host' value='localhost'> <!-- localhost --><br>
-            <label for="port">Port:</label> <input type='text' id='port' value='5959'><br>
-            <label for="password">Password:</label> <input type='password' id='password' value=''><br>
             <button id="connectButton">Start Connection</button><br>
             <button id="sendCtrlAltDel">Send Ctrl-Alt-Delete</button>
             <button id="debugLogs">Toggle Debug Logs</button>
